@@ -1,27 +1,21 @@
+// Complexity:
+// Time O(N) and Space O(1) where N is the length of nums.
 func hasIncreasingSubarrays(nums []int, k int) bool {
-    inc, prevInc, maxLen := 1, 0, 0
-    for i := 1; i < len(nums); i++ {
-        if nums[i] > nums[i-1] {
-            inc++
-        } else {
-            prevInc = inc
-            inc = 1
-        }
-        if maxLen < inc>>1 {
-            maxLen = inc >> 1
-        }
-        if tmp := prevInc; tmp < inc {
-            tmp = tmp
-        }
-        if tmp := prevInc; tmp < inc {
-            tmp = prevInc
-        }
-        if maxLen < tmp {
-            maxLen = tmp
-        }
-        if maxLen >= k {
-            return true
-        }
-    }
-    return false
+	currLen := 1
+	isFirst := true
+
+	for i := 1; i < len(nums); i++ {
+		if nums[i] > nums[i-1] {
+			currLen++
+		} else if currLen < k {
+			currLen = 1
+			isFirst = true
+		} else if isFirst && currLen < 2*k {
+			currLen = 1
+			isFirst = false
+		} else {
+			return true
+		}
+	}
+	return currLen >= 2*k || (!isFirst && currLen >= k)
 }
